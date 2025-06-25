@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Сегеда Д А ИПО-21.23</title>
+  <style>
+    body {
+      background-color: #c0ecd2;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .calculator {
+      background-color: #689CD2;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.30);
+      margin-bottom: 20px;
+    }
+
+    .result {
+      width: 220px;
+      height: 50px;
+      margin-bottom: 15px;
+      padding-right: 10px;
+      background: #e3fa4f;
+      text-align: right;
+      color: #000000;
+      font-size: 1.5rem;
+      font-family: Arial, Helvetica, sans-serif;
+      border-radius: 5px;
+    }
+
+    .my-btn {
+      margin-right: 5px;
+      margin-top: 5px;
+      width: 50px;
+      height: 50px;
+      border-radius: 5px;
+      border: none;
+      background: #70dbfc;
+      color: rgb(0, 0, 0);
+      font-size: 1.5rem;
+      font-family: Arial, Helvetica, sans-serif;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .my-btn:hover {
+      background: #c0ecd2;
+    }
+
+    .my-btn:active {
+      filter: brightness(130%);
+    }
+
+    .my-btn.primary {
+      background: #FF7373;
+    }
+
+    .my-btn.secondary {
+      background: #FF7373;
+    }
+
+    .my-btn.execute {
+      width: 110px;
+      border-radius: 5px;
+    }
+
+    .autor {
+      color: #000000;
+      font-size: 1rem;
+      font-weight: bold;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <div id="result" class="result">
+      0
+    </div>
+
+    <div>
+      <div>
+        <button id="btn_op_clear" class="my-btn secondary">C</button>
+        <button id="btn_op_sign" class="my-btn secondary">+/-</button>
+        <button id="btn_op_percent" class="my-btn secondary">%</button>
+        <button id="btn_op_div" class="my-btn primary">/</button>
+      </div>
+
+      <div>
+        <button id="btn_digit_7" class="my-btn">7</button>
+        <button id="btn_digit_8" class="my-btn">8</button>
+        <button id="btn_digit_9" class="my-btn">9</button>
+        <button id="btn_op_mult" class="my-btn primary">x</button>
+      </div>
+
+      <div>
+        <button id="btn_digit_4" class="my-btn">4</button>
+        <button id="btn_digit_5" class="my-btn">5</button>
+        <button id="btn_digit_6" class="my-btn">6</button>
+        <button id="btn_op_minus" class="my-btn primary">-</button>
+      </div>
+
+      <div>
+        <button id="btn_digit_1" class="my-btn">1</button>
+        <button id="btn_digit_2" class="my-btn">2</button>
+        <button id="btn_digit_3" class="my-btn">3</button>
+        <button id="btn_op_plus" class="my-btn primary">+</button>
+      </div>
+
+      <div>
+        <button id="btn_digit_dot" class="my-btn primary">.</button>
+        <button id="btn_digit_0" class="my-btn">0</button>
+        <button id="btn_op_equal" class="my-btn primary execute">=</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="autor">
+    Работа выполнена Сегеда Д. А.
+  </div>
+
+
+   <script>
+  window.onload = function() {
+    let a = ''
+    let b = ''
+    let expressionResult = ''
+    let selectedOperation = null
+    const outputElement = document.getElementById("result")
+    const digitButtons = document.querySelectorAll('[id ^= "btn_digit_"]')
+
+    function onDigitButtonClicked(digit) {
+      if (!selectedOperation) {
+        if (digit != '.' || digit == '.' && !a.includes(digit)) { 
+          a += digit
+        }
+        outputElement.innerHTML = a
+      } else {
+        if (digit != '.' || digit == '.' && !b.includes(digit)) { 
+          b += digit
+          outputElement.innerHTML = b        
+        }
+      }
+    }
+
+    digitButtons.forEach(button => {
+      button.onclick = function() {
+        const digitValue = button.innerHTML
+        onDigitButtonClicked(digitValue)
+      }
+    })
+
+    document.getElementById("btn_op_mult").onclick = function() { 
+      if (a === '') return
+      selectedOperation = 'x'
+    }
+    document.getElementById("btn_op_plus").onclick = function() { 
+      if (a === '') return
+      selectedOperation = '+'
+    }
+    document.getElementById("btn_op_minus").onclick = function() { 
+      if (a === '') return
+      selectedOperation = '-'
+    }
+    document.getElementById("btn_op_div").onclick = function() { 
+      if (a === '') return
+      selectedOperation = '/'
+    }
+
+    document.getElementById("btn_op_clear").onclick = function() { 
+      a = ''
+      b = ''
+      selectedOperation = ''
+      expressionResult = ''
+      outputElement.innerHTML = 0
+    }
+
+    document.getElementById("btn_op_equal").onclick = function() { 
+      if (a === '' || b === '' || !selectedOperation) return
+        
+      switch(selectedOperation) { 
+        case 'x':
+          expressionResult = (+a) * (+b)
+          break
+        case '+':
+          expressionResult = (+a) + (+b)
+          break
+        case '-':
+          expressionResult = (+a) - (+b)
+          break
+        case '/':
+          expressionResult = (+a) / (+b)
+          break
+      }
+      
+      a = expressionResult.toString()
+      b = ''
+      selectedOperation = null
+      outputElement.innerHTML = a
+    }
+
+    document.getElementById("btn_op_sign").onclick = function() {
+      if (!selectedOperation && a !== '') {
+        a = (-parseFloat(a)).toString()
+        outputElement.innerHTML = a
+      } else if (selectedOperation && b !== '') {
+        b = (-parseFloat(b)).toString()
+        outputElement.innerHTML = b
+      }
+    }
+
+    document.getElementById("btn_op_percent").onclick = function() {
+      if (!selectedOperation && a !== '') {
+        a = (parseFloat(a)/100).toString()
+        outputElement.innerHTML = a
+      } else if (selectedOperation && b !== '') {
+        b = (parseFloat(b)/100 * parseFloat(a)).toString()
+        outputElement.innerHTML = b
+      }
+    }
+  }
+  </script>
+</body>
+</html>
