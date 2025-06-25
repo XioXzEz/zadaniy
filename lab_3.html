@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Породы кошек</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+<style>
+.card {
+display: flex;
+flex-direction: column;
+height: 100%;
+}
+.card-body {
+flex-grow: 1;
+}
+.card-btn {
+margin-top: auto;
+}
+.subject-img {
+height: 200px;
+object-fit: cover;
+}
+</style>
+</head>
+<body>
+<div id="root" class="container mt-3"></div>
+
+<script>
+class MainPage {
+constructor(parent) {
+this.parent = parent;
+}
+
+getData() {
+return [
+{
+id: 1,
+title: "Британская короткошёрстная кошка",
+text: "Чёрт, нежить, дьявол, по характеру сын маминой подруги, по жизни король, по ласковости цемент",
+src: "https://encrypted-tbn2.gstatic.com/images?q=tbn:ANd9GcS78cR5VQ6K96vM9TmFSDOSThfp7pEhS0SGw9_gIdGPLsyO2AuUrFwNDKdQYZeVbf7I3Yh6_O-MQUFvyrGD-VYafA"
+},
+{
+id: 2,
+title: "Сфинкс",
+text: "По скорости Доминик Торетто, по характеру Джейсон Стейтем, по энергичности Джонни Синс, по харизме Дуэйн Джонсон, по жизни Дмитрий Нагиев",
+src: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcQQmFz-Q1MyiBIsxNkBvHcTPBikCPXPOGskpL7u8Bav7MBUbXwyYYpAP6cXweO32QHFC43OaDdjm7nJlhQQOUxeVA"
+},
+{
+id: 3,
+title: "Мейн-кун",
+text: "Ласковые, добрые, пушистые, радушные, любвеобильные, игривые, проказливые, изящные, нежные, большие и просто очень добрые",
+src: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcRqYx6xrpFXqt0-n5df-EnZvEaRng61eYQz4PvOqoi5gjWst9zGuybjaV1mjxzRTorEDk8bZ8B_wWbwUjAwT--MSQ"
+},
+{
+id: 4,
+title: "Шотландская вислоухая кошка",
+text: "По внешности плюшевый ангел, по натуре Мистер Бин, по гениальности бутылка, по ласковости грелка с моторчиком",
+src: "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcRkx9N_EKkX7SFpnYlY0eCjx15AAndHPc1lxqQeOeM9m6qLmpFjhQosBjGlEIuc1sv9_Sy7M0jObbCR9ds_cZyiSQ"
+},
+{
+id: 5,
+title: "Японский бобтейл",
+text: "По энергии ураган в миниатюре, по грации самурай на цыпочках, по прыгучести боевой ниндзя, по преданности – хатико",
+src: "https://encrypted-tbn3.gstatic.com/images?q=tbn:ANd9GcTaVz8ddAtGKbvGx9G2W7lY4cm6fZNPHTuTlPL9jctjYIs3OBL2N_uOE8A39I8Kgrj6QMOSc8UfpaHKqTy8HjDldA"
+},
+{
+id: 6,
+title: "Сомали",
+text: "По темпераменту ураган с пушистым хвостом, по грации дикая пантера в миниатюре, по игривости норка, по харизме огненный моторчик",
+src: "https://encrypted-tbn1.gstatic.com/images?q=tbn:ANd9GcTahUUsQeCFwvd0NSrWb_S8amxUd6PI1v40N6gGCNae_ceGdyA0T7cM5mRByjdXqCiAyQfWS4Hrn3TB0n3e6AwuGA"
+}
+];
+}
+
+render() {
+this.parent.innerHTML = `
+<h1 class="mb-4">Породы кошек</h1>
+<div id="cards-container" class="row g-3"></div>
+`;
+
+const container = document.getElementById('cards-container');
+this.getData().forEach(item => {
+const card = `
+<div class="col-md-4 mb-4">
+<div class="card h-100 shadow-sm">
+<img src="${item.src}" class="card-img-top subject-img" alt="${item.title}">
+<div class="card-body">
+<h5 class="card-title">${item.title}</h5>
+<p class="card-text">${item.text}</p>
+<button class="btn btn-primary card-btn" data-id="${item.id}">Подробнее</button>
+</div>
+</div>
+</div>
+`;
+container.insertAdjacentHTML('beforeend', card);
+});
+
+document.querySelectorAll('[data-id]').forEach(btn => {
+btn.addEventListener('click', (e) => {
+const id = e.target.getAttribute('data-id');
+new SubjectPage(this.parent, id).render();
+});
+});
+}
+}
+
+class SubjectPage {
+constructor(parent, id) {
+this.parent = parent;
+this.id = id;
+}
+
+getData() {
+const data = {
+1: {
+title: "Британская короткошёрстная кошка",
+description: "Британские кошки - одна из самых популярных пород в мире. Отличаются плюшевой шерстью, круглой мордочкой и спокойным характером. Идеальные компаньоны для тех, кто ценит независимость и достоинство в кошке.",
+program: "1. История происхождения\n2. Внешние характеристики\n3. Особенности характера\n4. Уход и содержание\n5. Питание британцев\n6. Здоровье и болезни",
+image: "https://жизньпитомца.рф/upload/iblock/f36/f36cc496802e10056b9bee7fa6114464.jpg"
+},
+2: {
+title: "Сфинкс",
+description: "Канадские сфинксы - уникальные бесшерстные кошки с необычной внешностью и горячим телом. Очень общительные, любят внимание и совершенно не переносят одиночества. Требуют особого ухода за кожей.",
+program: "1. История породы\n2. Особенности кожи сфинксов\n3. Темперамент и поведение\n4. Уход за сфинксом\n5. Кормление\n6. Здоровье и генетические заболевания",
+image: "https://yac-wh-sb-prod-s3-media-07001.storage.yandexcloud.net/media/images/sphinx.max-2880x1820.format-jpeg_SPtfFVj.jpg"
+},
+3: {
+title: "Мейн-кун",
+description: "Мейн-куны - самые крупные домашние кошки, известные своим дружелюбным характером и кисточками на ушах. Отличные охотники, прекрасно ладят с детьми и другими животными. Обладают густой водоотталкивающей шерстью.",
+program: "1. Происхождение мейн-кунов\n2. Размеры и стандарты породы\n3. Характер и интеллект\n4. Уход за шерстью\n5. Особенности кормления\n6. Здоровье и продолжительность жизни",
+image: "https://zoo-vision.com/images/veter74.webp"
+},
+4: {
+title: "Шотландская вислоухая кошка",
+description: "Скоттиш-фолды известны своими загнутыми вперед ушками и круглыми глазами. Имеют спокойный, уравновешенный характер, не любят высоту. Требуют особого внимания к ушным раковинам и суставам.",
+program: "1. История вислоухих кошек\n2. Генетические особенности\n3. Характер и повадки\n4. Уход за ушами\n5. Питание скоттиш-фолдов\n6. Проблемы с опорно-двигательным аппаратом",
+image: "https://yac-wh-sb-prod-s3-media-07001.storage.yandexcloud.net/media/images/shotlandskaya-visloukhaya2.max-2880x1820.format-jpeg_pCzIpWx.jpg"
+},
+5: {
+title: "Японский бобтейл",
+description: "Японские бобтейлы - кошки с коротким хвостом-помпоном, считающиеся символом удачи в Японии. Очень активные, любят воду и отличаются собачьей преданностью хозяину. Шерсть практически не линяет.",
+program: "1. Легенды и история\n2. Особенности хвоста\n3. Темперамент и обучаемость\n4. Уход за шерстью\n5. Кормление бобтейлов\n6. Генетическое здоровье",
+image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLL4yROZkHHPZlduleI1FSS99fWuLF_AzX1Q&s"
+},
+6: {
+title: "Сомали",
+description: "Сомалийские кошки - длинношерстная разновидность абиссинцев. Обладают диким окрасом, пушистым хвостом и невероятной энергичностью. Любят высоту и постоянно находятся в движении. Очень разговорчивы.",
+program: "1. История сомалийской породы\n2. Окрасы и стандарты\n3. Характер и активность\n4. Уход за длинной шерстью\n5. Питание сомали\n6. Здоровье и наследственные болезни",
+image: "https://murchalkin.ru/assets/server/post_images/shares/63b94dba61a5a.jpg"
+}
+};
+return data[this.id];
+}
+
+render() {
+const data = this.getData();
+this.parent.innerHTML = `
+<button id="back-btn" class="btn btn-secondary mb-3">Назад к списку</button>
+<div class="row">
+<div class="col-md-4">
+<img src="${data.image}" class="img-fluid rounded shadow" alt="${data.title}">
+</div>
+<div class="col-md-8">
+<h1>${data.title}</h1>
+<p class="lead">${data.description}</p>
+</div>
+</div>
+
+<div class="accordion mt-4" id="accordionExample">
+<div class="accordion-item">
+<h2 class="accordion-header">
+<button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne">
+Основная информация о породе
+</button>
+</h2>
+<div id="collapseOne" class="accordion-collapse collapse show">
+<div class="accordion-body">
+<pre>${data.program}</pre>
+</div>
+</div>
+</div>
+<div class="accordion-item">
+<h2 class="accordion-header">
+<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+Интересные факты
+</button>
+</h2>
+<div id="collapseTwo" class="accordion-collapse collapse">
+<div class="accordion-body">
+${this.getFacts(this.id)}
+</div>
+</div>
+</div>
+</div>
+`;
+
+document.getElementById('back-btn').addEventListener('click', () => {
+new MainPage(this.parent).render();
+});
+}
+
+getFacts(id) {
+const facts = {
+1: "Британские кошки достигают полного физического развития только к 3-5 годам. Их шерсть имеет уникальную текстуру, отличающуюся от других пород.",
+2: "Сфинксы потеют всем телом и могут загорать. Их температура тела на 1-2 градуса выше, чем у других кошек. В холодное время года могут обрастать легким пушком.",
+3: "Мейн-куны умеют издавать необычные трели и чирикающие звуки. Некоторые особи любят играть с водой и даже плавать. Это одна из самых крупных домашних пород.",
+4: "Шотландские вислоухие котята рождаются с прямыми ушами, которые начинают загибаться только через 3-4 недели. Не все котята в помете бывают вислоухими.",
+5: "Японские бобтейлы считаются национальным достоянием Японии. Их короткий хвост - результат естественной мутации, а не человеческой селекции.",
+6: "Сомалийские кошки - это фактически длинношерстные абиссинцы. Порода была признана только в 1970-х годах, хотя такие котята рождались в пометах абиссинцев десятилетиями."
+};
+return facts[id];
+}
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+new MainPage(document.getElementById('root')).render();
+});
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
